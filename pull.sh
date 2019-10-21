@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-export MODULE_NAME=TidyUp
+source "version.sh"
 scorpio-utilities/pull.sh
