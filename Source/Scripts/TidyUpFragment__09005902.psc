@@ -1,12 +1,12 @@
 ;BEGIN FRAGMENT CODE - Do not edit anything between this and the end comment
-;NEXT FRAGMENT INDEX 1
-Scriptname TidyUpShowFragment__0800590C Extends TopicInfo Hidden
+;NEXT FRAGMENT INDEX 3
+Scriptname TidyUpFragment__09005902 Extends TopicInfo Hidden
 
-;BEGIN FRAGMENT Fragment_0
-Function Fragment_0(ObjectReference akSpeakerRef)
+;BEGIN FRAGMENT Fragment_2
+Function Fragment_2(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
-(GetOwningQuest() as TidyUpQuest).AddLabel("Clothing", akSpeaker)
+(GetOwningQuest() as TidyUpQuest).TidyUp(akSpeaker)
 ;END CODE
 EndFunction
 ;END FRAGMENT
