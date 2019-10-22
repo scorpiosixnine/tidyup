@@ -8,8 +8,8 @@ Book property TidyUpLabelWeapons auto
 TidyUpLabel property pLabels auto
 Keyword property pCompanionKeyword auto
 Faction property pFollowerFaction auto
-Actor property pTidier auto
 ReferenceAlias property rReceiver auto
+FormList property pEmptyList auto
 
 event OnInit()
   Debug.Notification(pName + GetFullVersionString() + " Initialising.")
@@ -21,51 +21,60 @@ function SanityCheck()
 
   if pDebugMode
     self.Debug("got " + GetLabelCount() + " labels")
+    TidyUpLabel label = pLabels
+    while label
+      self.Debug("- " + label.GetDisplayName() + " (" + label.pContainer.GetDisplayName() + ")")
+      label = label.pNextLabel
+    endwhile
   endIf
 
+endFunction
+
+function TidyUpSpare(Actor speaker)
+  self.Debug("tidying up spare stuff")
+  SanityCheck()
 endFunction
 
 function TidyUp(Actor speaker)
   self.Debug("tidying up")
   SanityCheck()
 
-  TidyUpLabel label = pLabels
-  while label
-    self.Debug("Got label " + label.GetDisplayName() + " in " + label.pContainer.GetDisplayName())
-    label = label.pNextLabel
-  endwhile
-
-  int count = speaker.GetNumItems()
-  ; ObjectReference[] inventory = new ObjectReference[128]
-  ; int n = 0
-  ; while (n < count) && (n < 128)
-  ;   inventory[n] = speaker.GetNthForm(n) as ObjectReference
-  ;   n += 1
-  ; endwhile
-
-
   rReceiver.ForceRefTo(speaker)
-  pTidier = speaker
   speaker.ShowGiftMenu(true, None, false, false)
-  pTidier = None
   rReceiver.ForceRefTo(None)
-
-  ; int newCount = speaker.GetNumItems()
-  ; self.Debug("speaker item count was" + count)
-  ; self.Debug("new speaker item count " + count)
-  ;
-  ; int n = count
-  ; while n < newCount
-  ;   ObjectReference object = speaker.GetNthForm(n) as ObjectReference
-  ;   self.Debug("added " + object.GetBaseObject().GetName())
-  ;   n += 1
-  ; endwhile
 endFunction
 
-function PotentiallyTidy(ObjectReference item)
-  if pTidier
-    self.Debug(pTidier.GetDisplayName() + " will tidy up " + item.GetDisplayName())
+function TidyItem(ObjectReference item, Actor tidier)
+  Form base = item.GetBaseObject()
+  if base
+    self.Debug(tidier.GetDisplayName() + " will tidy up " + base.GetName())
+    TidyUpContainerFor(base)
+  else
+    self.Debug("item base missing")
   endif
+endFunction
+
+function TidyForm(Form item, int count, Actor tidier)
+    self.Debug(tidier.GetDisplayName() + " will tidy up " + item.GetName() + " x " + count)
+    TidyUpContainerFor(item)
+endFunction
+
+ObjectReference function TidyUpContainerFor(Form item)
+  String name = item.GetName()
+  TidyUpLabel label = pLabels
+  while label
+    int n = 0
+    int count = label.pKeywords.Length
+    while n < count
+      Keyword match = label.pKeywords[n]
+      if item.HasKeyword(match)
+        self.Debug("Item " + name + " matches label" + label.GetDisplayName())
+        return label.pContainer
+      endif
+    endwhile
+    label = label.pNextLabel
+  endwhile
+  return None
 endFunction
 
 function LabelMoved(TidyUpLabel label, ObjectReference from, ObjectReference to)
