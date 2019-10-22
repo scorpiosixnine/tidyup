@@ -9,7 +9,7 @@ TidyUpLabel property pLabels auto
 Keyword property pCompanionKeyword auto
 Faction property pFollowerFaction auto
 Actor property pTidier auto
-ReferenceAlias property rPlayer auto
+ReferenceAlias property rReceiver auto
 
 event OnInit()
   Debug.Notification(pName + GetFullVersionString() + " Initialising.")
@@ -44,11 +44,11 @@ function TidyUp(Actor speaker)
   ; endwhile
 
 
-  rPlayer.ForceRefTo(speaker)
+  rReceiver.ForceRefTo(speaker)
   pTidier = speaker
   speaker.ShowGiftMenu(true, None, false, false)
   pTidier = None
-  rPlayer.ForceRefTo(None)
+  rReceiver.ForceRefTo(None)
 
   ; int newCount = speaker.GetNumItems()
   ; self.Debug("speaker item count was" + count)
