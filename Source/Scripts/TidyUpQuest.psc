@@ -8,6 +8,8 @@ Book property TidyUpLabelWeapons auto
 TidyUpLabel property pLabels auto
 Keyword property pCompanionKeyword auto
 Faction property pFollowerFaction auto
+Actor property pTidier auto
+ReferenceAlias property rPlayer auto
 
 event OnInit()
   Debug.Notification(pName + GetFullVersionString() + " Initialising.")
@@ -28,16 +30,46 @@ function TidyUp(Actor speaker)
   SanityCheck()
 
   TidyUpLabel label = pLabels
-  while(label)
-    self.Debug("Got label " + label.GetName() + " in " + label.pContainer.GetName())
+  while label
+    self.Debug("Got label " + label.GetDisplayName() + " in " + label.pContainer.GetDisplayName())
     label = label.pNextLabel
   endwhile
 
+  int count = speaker.GetNumItems()
+  ; ObjectReference[] inventory = new ObjectReference[128]
+  ; int n = 0
+  ; while (n < count) && (n < 128)
+  ;   inventory[n] = speaker.GetNthForm(n) as ObjectReference
+  ;   n += 1
+  ; endwhile
+
+
+  rPlayer.ForceRefTo(speaker)
+  pTidier = speaker
   speaker.ShowGiftMenu(true, None, false, false)
+  pTidier = None
+  rPlayer.ForceRefTo(None)
+
+  ; int newCount = speaker.GetNumItems()
+  ; self.Debug("speaker item count was" + count)
+  ; self.Debug("new speaker item count " + count)
+  ;
+  ; int n = count
+  ; while n < newCount
+  ;   ObjectReference object = speaker.GetNthForm(n) as ObjectReference
+  ;   self.Debug("added " + object.GetBaseObject().GetName())
+  ;   n += 1
+  ; endwhile
+endFunction
+
+function PotentiallyTidy(ObjectReference item)
+  if pTidier
+    self.Debug(pTidier.GetDisplayName() + " will tidy up " + item.GetDisplayName())
+  endif
 endFunction
 
 function LabelMoved(TidyUpLabel label, ObjectReference from, ObjectReference to)
-  self.Debug("label " + label.GetName() + " moved from " + from.GetName() + " to " + to.GetName())
+  self.Debug("label " + label.GetDisplayName() + " moved from " + from.GetDisplayName() + " to " + to.GetDisplayName())
   SanityCheck()
 
   Actor person = to as Actor
