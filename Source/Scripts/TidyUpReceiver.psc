@@ -4,5 +4,5 @@ TidyUpQuest property pQuest auto
 
 Event OnItemAdded(Form akBaseItem, int aiItemCount, ObjectReference akItemReference, ObjectReference akSourceContainer)
   Actor owner = self.GetActorReference()
-  pQuest.TidyForm(akBaseItem, aiItemCount)
+  pQuest.TidyForm(akBaseItem, aiItemCount, owner)
 EndEvent

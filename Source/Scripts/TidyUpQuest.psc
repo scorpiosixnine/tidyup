@@ -48,7 +48,10 @@ function TidyItem(ObjectReference item, Actor tidier)
   Form base = item.GetBaseObject()
   if base
     self.Debug(tidier.GetDisplayName() + " will tidy up " + base.GetName())
-    TidyUpContainerFor(base)
+    ObjectReference destination = TidyUpContainerFor(base)
+    if destination
+      tidier.RemoveItem(item, 1, true, destination)
+    endif
   else
     self.Debug("item base missing")
   endif
@@ -56,7 +59,10 @@ endFunction
 
 function TidyForm(Form item, int count, Actor tidier)
     self.Debug(tidier.GetDisplayName() + " will tidy up " + item.GetName() + " x " + count)
-    TidyUpContainerFor(item)
+    ObjectReference destination = TidyUpContainerFor(item)
+    if destination
+      tidier.RemoveItem(item, count, true, destination)
+    endif
 endFunction
 
 ObjectReference function TidyUpContainerFor(Form item)
