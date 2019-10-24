@@ -10,6 +10,7 @@ Keyword property pCompanionKeyword auto
 Faction property pFollowerFaction auto
 ReferenceAlias property rReceiver auto
 FormList property pEmptyList auto
+bool property pEnabled auto
 
 event OnInit()
   Debug.Notification(pName + GetFullVersionString() + " Initialising.")
