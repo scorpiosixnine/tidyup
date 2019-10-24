@@ -27,6 +27,14 @@ function SanityCheck()
       self.Debug("- " + label.GetDisplayName() + " (" + label.pContainer.GetDisplayName() + ")")
       label = label.pNextLabel
     endwhile
+
+    if IsRunning()
+      self.Debug("Quest is running.")
+    endif
+
+    if IsActive()
+      self.Debug("Quest is active.")
+    endif
   endIf
 
 endFunction

@@ -50,7 +50,10 @@ endFunction
 
 event OnVersionUpdate(int newVersion)
   pQuest.Log("TidyUp updated to version " + pQuest.GetFullVersionString())
+  pQuest.SanityCheck()
   pQuest.Reset()
+  pQuest.Start()
+  pQuest.SanityCheck()
 endEvent
 
 event OnPageReset(string page)
