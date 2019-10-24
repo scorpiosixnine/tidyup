@@ -6,7 +6,6 @@ Book property TidyUpLabelClothing auto
 Book property TidyUpLabelWeapons auto
 
 TidyUpLabel property pLabels auto
-Keyword property pCompanionKeyword auto
 Faction property pFollowerFaction auto
 ReferenceAlias property rReceiver auto
 FormList property pEmptyList auto

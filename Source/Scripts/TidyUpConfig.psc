@@ -9,23 +9,6 @@ String[] _toggleIDs
 int _toggleCount = 0
 int _toggleMax = 0
 
-int _topsCount = 0
-String[] _topNames
-bool[] _topEnabled
-
-int _femaleCount = 0
-String[] _femaleNames
-bool[] _femaleEnabled
-
-int _maleCount = 0
-String[] _maleNames
-bool[] _maleEnabled
-
-int _inventoryCount = 0
-String[] _inventoryNames
-bool[] _inventoryEnabled
-int[] _inventoryIndexes
-
 String _generalPage = "General"
 
 String[] _kinds
@@ -33,10 +16,13 @@ String[] _kinds
 event OnConfigInit()
   Pages = new string[3]
   Pages[0] = _generalPage
+
+  _toggles = new int[100]
+  pQuest.Debug("ConfigInit")
 endEvent
 
 event OnConfigOpen()
-  pQuest.Trace("ConfigOpen")
+  pQuest.Debug("ConfigOpen")
 
 endEvent
 
@@ -51,6 +37,7 @@ endFunction
 event OnVersionUpdate(int newVersion)
   pQuest.Log("TidyUp updated to version " + pQuest.GetFullVersionString())
   pQuest.SanityCheck()
+  pQuest.Log("Resetting")
   pQuest.Reset()
   pQuest.Start()
   pQuest.SanityCheck()
