@@ -26,8 +26,7 @@ event OnConfigOpen()
 endEvent
 
 event OnConfigClose()
-  Debug.Trace("trace test")
-  pQuest.Debug("ConfigClose")
+  pQuest.Trace("ConfigClose")
   pQuest.SanityCheck()
 endEvent
 

@@ -12,7 +12,6 @@ FormList property pEmptyList auto
 bool property pEnabled auto
 
 event OnInit()
-  Debug.Trace("trace test")
   Debug.Notification(pName + GetFullVersionString() + " Initialising.")
   SanityCheck()
   SetEnabled(true)
@@ -118,7 +117,7 @@ endFunction
 function AddLabel(String labelName, Actor speaker)
   SanityCheck()
 
-  Debug.Notification("adding label " + labelName)
+  self.Trace("adding label " + labelName)
   ObjectReference player = Game.GetPlayer()
   Book template
 
