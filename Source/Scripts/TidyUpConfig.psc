@@ -35,7 +35,7 @@ int function GetVersion()
 endFunction
 
 event OnVersionUpdate(int newVersion)
-  pQuest.Log("TidyUp updated to version " + pQuest.GetFullVersionString())
+  pQuest.Log("updated to version " + pQuest.GetFullVersionString())
   pQuest.SanityCheck()
   ; pQuest.Log("Resetting")
   ; pQuest.Reset()
@@ -92,7 +92,7 @@ endFunction
 function SetupGeneralPage()
   SetCursorFillMode(TOP_TO_BOTTOM)
 
-  AddHeaderOption("TidyUp " + pQuest.GetFullVersionString())
+  AddHeaderOption(pQuest.pName + pQuest.GetFullVersionString())
   AddEmptyOption()
   AddTextOption("By scorpiosixnine.", "")
 

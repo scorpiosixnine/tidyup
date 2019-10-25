@@ -21,19 +21,19 @@ function SanityCheck()
   pDebugMode = true
 
   if pDebugMode
-    self.Debug("got " + GetLabelCount() + " labels")
+    self.Trace("got " + GetLabelCount() + " labels")
     TidyUpLabel label = pLabels
     while label
-      self.Debug("- " + label.GetDisplayName() + " (" + label.pContainer.GetDisplayName() + ")")
+      self.Trace("- " + label.GetDisplayName() + " (" + label.pContainer.GetDisplayName() + ")")
       label = label.pNextLabel
     endwhile
 
     if IsRunning()
-      self.Debug("Quest is running.")
+      self.Trace("Quest is running.")
     endif
 
     if IsActive()
-      self.Debug("Quest is active.")
+      self.Trace("Quest is active.")
     endif
   endIf
 
@@ -42,19 +42,19 @@ endFunction
 function SetEnabled(bool enabled)
   pEnabled = enabled
   if enabled
-    self.Debug("TidyUp enabled")
+    self.Trace("enabled")
   else
-    self.Debug("TidyUp disabled")
+    self.Trace("disabled")
   endif
 endFunction
 
 function TidyUpSpare(Actor speaker)
-  self.Debug("tidying up spare stuff")
+  self.Trace("tidying up spare stuff")
   SanityCheck()
 endFunction
 
 function TidyUp(Actor speaker)
-  self.Debug("tidying up")
+  self.Trace("tidying up")
   SanityCheck()
 
   rReceiver.ForceRefTo(speaker)
@@ -71,12 +71,12 @@ function TidyItem(ObjectReference item, Actor tidier)
       tidier.RemoveItem(item, 1, true, destination)
     endif
   else
-    self.Debug("item base missing")
+    self.Warning("item base missing")
   endif
 endFunction
 
 function TidyForm(Form item, int count, Actor tidier)
-    self.Debug(tidier.GetDisplayName() + " will tidy up " + item.GetName() + " x " + count)
+    self.Trace(tidier.GetDisplayName() + " will tidy up " + item.GetName() + " x " + count)
     ObjectReference destination = TidyUpContainerFor(item)
     if destination
       tidier.RemoveItem(item, count, true, destination)
@@ -92,7 +92,7 @@ ObjectReference function TidyUpContainerFor(Form item)
     while n < count
       Keyword match = label.pKeywords[n]
       if item.HasKeyword(match)
-        self.Debug("Item " + name + " matches label" + label.GetDisplayName())
+        self.Trace("Item " + name + " matches label" + label.GetDisplayName())
         return label.pContainer
       endif
     endwhile
@@ -102,12 +102,12 @@ ObjectReference function TidyUpContainerFor(Form item)
 endFunction
 
 function LabelMoved(TidyUpLabel label, ObjectReference from, ObjectReference to)
-  self.Debug("label " + label.GetDisplayName() + " moved from " + from.GetDisplayName() + " to " + to.GetDisplayName())
+  self.Trace("label " + label.GetDisplayName() + " moved from " + from.GetDisplayName() + " to " + to.GetDisplayName())
   SanityCheck()
 
   Actor person = to as Actor
   if person && person.IsInFaction(pFollowerFaction)
-    self.Debug("handed label back to companion - destroying")
+    self.Trace("handed label back to companion - destroying")
     ForgetLabel(label)
     person.RemoveItem(label, 1, true)
     label.Delete()
@@ -130,7 +130,7 @@ function AddLabel(String labelName, Actor speaker)
   endif
 
   if !template
-    self.Debug("label not found")
+    self.Trace("label not found")
   endif
 
   player.AddItem(template)
@@ -158,20 +158,20 @@ bool function GotLabel(TidyUpLabel labelToCheck)
 endFunction
 
 function CreatedLabel(TidyUpLabel label)
-  self.Debug("created label")
-  self.Debug(label)
+  self.Trace("created label")
+  self.Trace(label)
   RememberLabel(label)
 endFunction
 
 function RememberLabel(TidyUpLabel label)
   if !label
-    self.Debug("remembering null label")
+    self.Warning("remembering null label")
   endif
 
   if !GotLabel(label)
     label.pNextLabel = pLabels
     pLabels = label
-    self.Debug("labels count is now " + GetLabelCount())
+    SanityCheck()
   endIf
 endFunction
 
@@ -189,6 +189,6 @@ function ForgetLabel(TidyUpLabel labelToForget)
     endwhile
   endIf
 
-  self.Debug("forgot label")
-  self.Debug("labels count is now " + GetLabelCount())
+  self.Trace("forgot label")
+  SanityCheck()
 endFunction
