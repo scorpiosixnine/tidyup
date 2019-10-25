@@ -1,12 +1,11 @@
 Scriptname TidyUpReceiver extends ReferenceAlias
 
-TidyUpQuest property pQuest auto
-
 Event OnInit()
-  Debug.Notification("receiver init")
+  Debug.Trace("receiver init")
 EndEvent
 
 Event OnItemAdded(Form akBaseItem, int aiItemCount, ObjectReference akItemReference, ObjectReference akSourceContainer)
+  Debug.Trace("item added")
   Actor owner = self.GetActorReference()
-  pQuest.TidyForm(akBaseItem, aiItemCount, owner)
+  (GetOwningQuest() as TidyUpQuest).TidyForm(akBaseItem, aiItemCount, owner)
 EndEvent

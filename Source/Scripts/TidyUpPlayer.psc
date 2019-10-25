@@ -1,11 +1,10 @@
 Scriptname TidyUpPlayer extends ReferenceAlias
-TidyUpQuest property pQuest auto
 
 Event OnInit()
-  Debug.Notification("player init")
+  Debug.Trace("player init")
 EndEvent
 
 event OnPlayerLoadGame()
-  Debug.Notification("load game called" )
+  Debug.Trace("load game called" )
 	(GetOwningQuest() as SKI_QuestBase).OnGameReload()
 endEvent

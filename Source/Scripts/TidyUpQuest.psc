@@ -15,6 +15,7 @@ event OnInit()
   Debug.Trace("trace test")
   Debug.Notification(pName + GetFullVersionString() + " Initialising.")
   SanityCheck()
+  SetEnabled(true)
 endEvent
 
 function SanityCheck()
@@ -37,6 +38,15 @@ function SanityCheck()
     endif
   endIf
 
+endFunction
+
+function SetEnabled(bool enabled)
+  pEnabled = enabled
+  if enabled
+    self.Debug("TidyUp enabled")
+  else
+    self.Debug("TidyUp disabled")
+  endif
 endFunction
 
 function TidyUpSpare(Actor speaker)

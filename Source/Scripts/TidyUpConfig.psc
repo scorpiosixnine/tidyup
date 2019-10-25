@@ -17,11 +17,11 @@ event OnConfigInit()
   Pages = new string[3]
   Pages[0] = _generalPage
 
-  pQuest.Debug("ConfigInit")
+  pQuest.Trace("ConfigInit")
 endEvent
 
 event OnConfigOpen()
-  pQuest.Debug("ConfigOpen")
+  pQuest.Trace("ConfigOpen")
 
 endEvent
 
@@ -38,10 +38,10 @@ endFunction
 event OnVersionUpdate(int newVersion)
   pQuest.Log("TidyUp updated to version " + pQuest.GetFullVersionString())
   pQuest.SanityCheck()
-  pQuest.Log("Resetting")
-  pQuest.Reset()
-  pQuest.Start()
-  pQuest.SanityCheck()
+  ; pQuest.Log("Resetting")
+  ; pQuest.Reset()
+  ; pQuest.Start()
+  ; pQuest.SanityCheck()
 endEvent
 
 event OnPageReset(string page)
@@ -86,7 +86,7 @@ function UpdateToggle(String identifier, bool value, int tag)
   if identifier == "Debugging"
     pQuest.pDebugMode = value
   elseif identifier == "Enabled"
-    pQuest.pEnabled = value
+    pQuest.SetEnabled(value)
   endif
 endFunction
 
