@@ -17,7 +17,6 @@ event OnConfigInit()
   Pages = new string[3]
   Pages[0] = _generalPage
 
-  _toggles = new int[100]
   pQuest.Debug("ConfigInit")
 endEvent
 
@@ -27,7 +26,9 @@ event OnConfigOpen()
 endEvent
 
 event OnConfigClose()
+  Debug.Trace("trace test")
   pQuest.Debug("ConfigClose")
+  pQuest.SanityCheck()
 endEvent
 
 int function GetVersion()
@@ -47,6 +48,13 @@ event OnPageReset(string page)
   {Called when a new page is selected, including the initial empty page}
 
   pQuest.Debug("PageReset " + page)
+
+  _toggleMax = 100
+  _toggles = new int[100]
+  _toggleValues = new bool[100]
+  _toggleTags = new int[100]
+  _toggleIDs = new String[100]
+  _toggleCount = 0
 
   if (page == _generalPage) || (page == "")
     SetupGeneralPage()

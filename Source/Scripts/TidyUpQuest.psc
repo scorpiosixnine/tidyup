@@ -12,6 +12,7 @@ FormList property pEmptyList auto
 bool property pEnabled auto
 
 event OnInit()
+  Debug.Trace("trace test")
   Debug.Notification(pName + GetFullVersionString() + " Initialising.")
   SanityCheck()
 endEvent
