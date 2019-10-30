@@ -17,11 +17,8 @@ String _debugPage = "Debug"
 String[] _kinds
 
 event OnConfigInit()
-  Pages = new string[2]
-  Pages[0] = _generalPage
-  Pages[1] = _debugPage
-
-  pQuest.Trace("ConfigInit")
+  pQuest.TraceFunction("ConfigInit")
+  ResetProperties()
 endEvent
 
 event OnConfigOpen()
@@ -32,18 +29,23 @@ event OnConfigClose()
   pQuest.TraceFunction("ConfigClose")
 endEvent
 
+function ResetProperties()
+  Pages = new string[2]
+  Pages[0] = _generalPage
+  Pages[1] = _debugPage
+endFunction
+
 int function GetVersion()
   return pQuest.pBuildNumber
 endFunction
 
 event OnVersionUpdate(int newVersion)
   pQuest.Log(pQuest.pName + " updated to version " + pQuest.GetFullVersionString())
+  ResetProperties()
 endEvent
 
 event OnPageReset(string page)
-  {Called when a new page is selected, including the initial empty page}
-
-  pQuest.Debug("PageReset " + page)
+  pQuest.TraceFunction("PageReset " + page)
 
   _toggleMax = 100
   _toggles = new int[100]
