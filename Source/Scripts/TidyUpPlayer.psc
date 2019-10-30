@@ -8,6 +8,5 @@ EndEvent
 
 event OnPlayerLoadGame()
 	(GetOwningQuest() as SKI_QuestBase).OnGameReload()
-  pQuest.Trace("load game called" )
-  pQuest.SanityCheck()
+  pQuest.TraceFunction("OnPlayerLoadGame")
 endEvent

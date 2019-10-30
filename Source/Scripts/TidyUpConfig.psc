@@ -12,12 +12,14 @@ int _toggleMax = 0
 int _resetButton = 0
 
 String _generalPage = "General"
+String _debugPage = "Debug"
 
 String[] _kinds
 
 event OnConfigInit()
-  Pages = new string[3]
+  Pages = new string[2]
   Pages[0] = _generalPage
+  Pages[1] = _debugPage
 
   pQuest.Trace("ConfigInit")
 endEvent
@@ -28,8 +30,7 @@ event OnConfigOpen()
 endEvent
 
 event OnConfigClose()
-  pQuest.Trace("ConfigClose")
-  pQuest.SanityCheck()
+  pQuest.TraceFunction("ConfigClose")
 endEvent
 
 int function GetVersion()
@@ -37,12 +38,7 @@ int function GetVersion()
 endFunction
 
 event OnVersionUpdate(int newVersion)
-  pQuest.Log("updated to version " + pQuest.GetFullVersionString())
-  pQuest.SanityCheck()
-  ; pQuest.Log("Resetting")
-  ; pQuest.Reset()
-  ; pQuest.Start()
-  ; pQuest.SanityCheck()
+  pQuest.Log(pQuest.pName + " updated to version " + pQuest.GetFullVersionString())
 endEvent
 
 event OnPageReset(string page)
@@ -59,6 +55,8 @@ event OnPageReset(string page)
 
   if (page == _generalPage) || (page == "")
     SetupGeneralPage()
+  elseif (page == _debugPage)
+    SetupDebugPage()
   endif
 endEvent
 
@@ -102,14 +100,6 @@ function SetupGeneralPage()
 
   AddHeaderOption(pQuest.pName + pQuest.GetFullVersionString())
   AddTextOption("By scorpiosixnine.", "")
-  AddEmptyOption()
-  AddHeaderOption("Labels")
-  int n = 0
-  int count = pQuest.pNewLabelNames.Length
-  while n < count
-    AddTextOption(pQuest.pNewLabelNames[n], "")
-    n += 1
-  endWhile
 
   SetCursorPosition(1)
   AddHeaderOption("Settings " + pQuest.GetFullVersionString())
@@ -121,6 +111,27 @@ function SetupGeneralPage()
   SetupToggle("Debugging", "Enable Logging", pQuest.pDebugMode)
 endFunction
 
+function SetupDebugPage()
+  SetCursorFillMode(TOP_TO_BOTTOM)
+
+  AddHeaderOption("Label Types")
+  int n = 0
+  int count = pQuest.pLabelTemplates.GetSize()
+  while n < count
+    TidyUpLabel label = pQuest.pLabelTemplates.GetAt(n) as TidyUpLabel
+    AddTextOption(label.GetDisplayName(), label.pKeywords[0].GetString())
+    n += 1
+  endWhile
+
+  SetCursorPosition(1)
+  AddHeaderOption("Current Labels")
+  TidyUpLabel label = pQuest.pLabels
+  while label
+    AddTextOption(label.GetDisplayName(), label.pContainer.GetDisplayName())
+    label = label.pNextLabel
+  endwhile
+
+endFunction
 
 function SetupToggle(String identifier, String name, bool initialState, int tag = 0)
   if _toggleCount < _toggleMax
