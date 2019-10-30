@@ -9,6 +9,8 @@ String[] _toggleIDs
 int _toggleCount = 0
 int _toggleMax = 0
 
+int _resetButton = 0
+
 String _generalPage = "General"
 
 String[] _kinds
@@ -61,7 +63,13 @@ event OnPageReset(string page)
 endEvent
 
 event OnOptionSelect(int option)
+  Debug.Notification("select " + option)
   int n = 0
+
+  if n == _resetButton
+    Debug.Notification("resetting")
+  endif
+
   while(n < _toggleCount)
     if option == _toggles[n]
       bool newValue = !_toggleValues[n]
@@ -93,12 +101,20 @@ function SetupGeneralPage()
   SetCursorFillMode(TOP_TO_BOTTOM)
 
   AddHeaderOption(pQuest.pName + pQuest.GetFullVersionString())
-  AddEmptyOption()
   AddTextOption("By scorpiosixnine.", "")
+  AddEmptyOption()
+  AddHeaderOption("Labels")
+  int n = 0
+  int count = pQuest.pNewLabelNames.Length
+  while n < count
+    AddHeaderOption(pQuest.pNewLabelNames[n])
+    n += 1
+  endWhile
 
   SetCursorPosition(1)
   AddHeaderOption("Settings " + pQuest.GetFullVersionString())
   SetupToggle("Enabled", "Enabled", pQuest.pEnabled)
+  _resetButton = AddTextOption("", "Reset")
 
   AddEmptyOption()
   AddHeaderOption("Debug Options")

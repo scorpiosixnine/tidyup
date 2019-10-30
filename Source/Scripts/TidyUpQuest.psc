@@ -4,12 +4,14 @@ Scriptname TidyUpQuest extends Quest
 Book property TidyUpLabelArmour auto
 Book property TidyUpLabelClothing auto
 Book property TidyUpLabelWeapons auto
-
 TidyUpLabel property pLabels auto
 Faction property pFollowerFaction auto
 ReferenceAlias property rReceiver auto
 FormList property pEmptyList auto
+FormList property pLabelTemplates auto
 bool property pEnabled auto
+String[] property pNewLabelNames auto
+int property pNewLabelIndex auto
 
 event OnInit()
   Debug.Notification(pName + GetFullVersionString() + " Initialising.")
@@ -115,9 +117,13 @@ function LabelMoved(TidyUpLabel label, ObjectReference from, ObjectReference to)
 endFunction
 
 function AddAllLabels(Actor speaker)
-  AddLabel("Armour", speaker)
-  AddLabel("Clothing", speaker)
-  AddLabel("Weapons", speaker)
+  SanityCheck()
+
+  self.Trace("adding new labels: " + pNewLabelNames.Length)
+  pNewLabelIndex = 0
+
+  ObjectReference player = Game.GetPlayer()
+  player.AddItem(TidyUpLabelArmour, pNewLabelNames.Length)
 endFunction
 
 function AddLabel(String labelName, Actor speaker)
@@ -165,6 +171,11 @@ endFunction
 
 function CreatedLabel(TidyUpLabel label)
   self.Trace("created label")
+  int count = label.pKeywords.Length
+  int n = 0
+  while n < count
+    self.Trace(label.pKeywords[n].GetString())
+  endwhile
   self.Trace(label)
   RememberLabel(label)
 endFunction
