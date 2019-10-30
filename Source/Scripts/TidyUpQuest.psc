@@ -114,6 +114,12 @@ function LabelMoved(TidyUpLabel label, ObjectReference from, ObjectReference to)
   endIf
 endFunction
 
+function AddAllLabels(Actor speaker)
+  AddLabel("Armour", speaker)
+  AddLabel("Clothing", speaker)
+  AddLabel("Weapons", speaker)
+endFunction
+
 function AddLabel(String labelName, Actor speaker)
   SanityCheck()
 
