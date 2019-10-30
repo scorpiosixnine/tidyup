@@ -45,10 +45,36 @@ function SetEnabled(bool enabled)
   pEnabled = enabled
   if enabled
     self.Trace("enabled")
+    Reset()
   else
     self.Trace("disabled")
   endif
 endFunction
+
+function Reset()
+  pNewLabelNames = new String[21]
+  pNewLabelNames[0] = "VendorItemArmor"
+  pNewLabelNames[1] = "VendorItemArrow"
+  pNewLabelNames[2] = "VendorItemBook"
+  pNewLabelNames[3] = "VendorItemClothing"
+  pNewLabelNames[4] = "VendorItemClutter"
+  pNewLabelNames[5] = "VendorItemFireword"
+  pNewLabelNames[6] = "VendorItemFood"
+  pNewLabelNames[7] = "VendorItemFoodRaw"
+  pNewLabelNames[8] = "VendorItemGem"
+  pNewLabelNames[9] = "VendorItemIngredient"
+  pNewLabelNames[10] = "VendorItemJewelry"
+  pNewLabelNames[11] = "VendorItemKey"
+  pNewLabelNames[12] = "VendorItemOreIngot"
+  pNewLabelNames[13] = "VendorItemPoison"
+  pNewLabelNames[14] = "VendorItemPotion"
+  pNewLabelNames[15] = "VendorItemRecipe"
+  pNewLabelNames[16] = "VendorItemScroll"
+  pNewLabelNames[17] = "VendorItemSoulGem"
+  pNewLabelNames[18] = "VendorItemSpellTome"
+  pNewLabelNames[19] = "VendorItemStaff"
+  pNewLabelNames[20] = "VendorItemTool"
+EndFunction
 
 function TidyUpSpare(Actor speaker)
   self.Trace("tidying up spare stuff")
@@ -177,6 +203,15 @@ function CreatedLabel(TidyUpLabel label)
     self.Trace(label.pKeywords[n].GetString())
   endwhile
   self.Trace(label)
+
+  if pNewLabelIndex < pNewLabelNames.Length
+    String name = pNewLabelNames[pNewLabelIndex]
+    label.SetName("Label: Put " + name + " here")
+    pNewLabelIndex += 1
+    Keyword[] keywords = new Keyword[1]
+    keywords[0] = Keyword.GetKeyword(name)
+    label.pKeywords = keywords
+  endIf
   RememberLabel(label)
 endFunction
 

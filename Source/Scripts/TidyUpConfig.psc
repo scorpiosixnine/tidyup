@@ -107,14 +107,14 @@ function SetupGeneralPage()
   int n = 0
   int count = pQuest.pNewLabelNames.Length
   while n < count
-    AddHeaderOption(pQuest.pNewLabelNames[n])
+    AddTextOption(pQuest.pNewLabelNames[n], "")
     n += 1
   endWhile
 
   SetCursorPosition(1)
   AddHeaderOption("Settings " + pQuest.GetFullVersionString())
   SetupToggle("Enabled", "Enabled", pQuest.pEnabled)
-  _resetButton = AddTextOption("", "Reset")
+  _resetButton = AddMenuOption("", "Reset")
 
   AddEmptyOption()
   AddHeaderOption("Debug Options")
