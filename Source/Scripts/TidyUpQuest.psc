@@ -17,15 +17,15 @@ function TraceFunction(String name)
   pDebugMode = true
 
   if pDebugMode
-    self.Trace(name)
-    self.Trace("Got " + GetLabelCount() + " labels.")
+    Trace(name)
+    Trace("Got " + GetLabelCount() + " labels.")
 
     if IsRunning()
-      self.Trace("Quest is running.")
+      Trace("Quest is running.")
     endif
 
     if IsActive()
-      self.Trace("Quest is active.")
+      Trace("Quest is active.")
     endif
   endIf
 
@@ -34,10 +34,10 @@ endFunction
 function SetEnabled(bool enabled)
   pEnabled = enabled
   if enabled
-    self.Trace("enabled")
+    Trace("enabled")
     Reset()
   else
-    self.Trace("disabled")
+    Trace("disabled")
   endif
 endFunction
 
@@ -67,14 +67,20 @@ function TidyItem(ObjectReference item, Actor tidier)
     ObjectReference destination = TidyUpContainerFor(base)
     if destination
       tidier.RemoveItem(item, 1, true, destination)
+    else
+      Warning("Don't know where to put " + base.GetName())
+      int n = 0
+      while n < base.GetNumKeywords()
+        Trace(base.GetNthKeyword(n).GetString())
+      endWhile
     endif
   else
-    self.Warning("item base missing")
+    Warning("item base missing")
   endif
 endFunction
 
 function TidyForm(Form item, int count, Actor tidier)
-    self.Trace(tidier.GetDisplayName() + " will tidy up " + item.GetName() + " x " + count)
+    Trace(tidier.GetDisplayName() + " will tidy up " + item.GetName() + " x " + count)
     ObjectReference destination = TidyUpContainerFor(item)
     if destination
       tidier.RemoveItem(item, count, true, destination)
@@ -91,7 +97,7 @@ ObjectReference function TidyUpContainerFor(Form item)
       while n < count
         Keyword match = label.pKeywords[n]
         if item.HasKeyword(match)
-          self.Trace("Item " + name + " matches label" + label.GetDisplayName())
+          Trace("Item " + name + " matches label" + label.GetDisplayName())
           return label.pContainer
         endif
       endwhile
@@ -103,11 +109,11 @@ endFunction
 
 function LabelMoved(TidyUpLabel label, ObjectReference from, ObjectReference to)
   TraceFunction("LabelMoved")
-  self.Trace("label " + label.GetDisplayName() + " moved from " + from.GetDisplayName() + " to " + to.GetDisplayName())
+  Trace("label " + label.GetDisplayName() + " moved from " + from.GetDisplayName() + " to " + to.GetDisplayName())
 
   Actor person = to as Actor
   if person && person.IsInFaction(pFollowerFaction)
-    self.Trace("handed label back to companion - destroying")
+    Trace("handed label back to companion - destroying")
     ForgetLabel(label)
     person.RemoveItem(label, 1, true)
     label.Delete()
@@ -142,20 +148,14 @@ bool function GotLabel(TidyUpLabel labelToCheck)
 endFunction
 
 function CreatedLabel(TidyUpLabel label)
-  self.Trace("created label")
-  int count = label.pKeywords.Length
-  int n = 0
-  while n < count
-    self.Trace(label.pKeywords[n].GetString())
-  endwhile
-  self.Trace(label)
+  TraceFunction("created label")
   RememberLabel(label)
 endFunction
 
 function RememberLabel(TidyUpLabel label)
   TraceFunction("RememberLabel")
   if !label
-    self.Warning("remembering null label")
+    Warning("remembering null label")
   endif
 
   if !GotLabel(label)
