@@ -7,7 +7,12 @@ Keyword[] property pKeywords auto
 FormList property pTemp auto
 
 String function GetLabelName()
-  return GetBaseObject().GetName()
+  ObjectReference bound = self as ObjectReference
+  if bound
+    return bound.GetDisplayName()
+  else
+    return "(unknown label)"
+  endif
 endFunction
 
 Event OnInit()
