@@ -25,8 +25,7 @@ event OnConfigInit()
 endEvent
 
 event OnConfigOpen()
-  pQuest.Trace("ConfigOpen")
-
+  pQuest.TraceFunction("ConfigOpen")
 endEvent
 
 event OnConfigClose()
@@ -119,7 +118,7 @@ function SetupDebugPage()
   int count = pQuest.pLabelTemplates.GetSize()
   while n < count
     TidyUpLabel label = pQuest.pLabelTemplates.GetAt(n) as TidyUpLabel
-    AddTextOption(label.GetDisplayName(), label.pKeywords[0].GetString())
+    AddTextOption(label.GetLabelName(), label.pKeywords[0].GetString())
     n += 1
   endWhile
 
@@ -127,7 +126,7 @@ function SetupDebugPage()
   AddHeaderOption("Current Labels")
   TidyUpLabel label = pQuest.pLabels
   while label
-    AddTextOption(label.GetDisplayName(), label.pContainer.GetDisplayName())
+    AddTextOption(label.GetLabelName(), label.pContainer.GetDisplayName())
     label = label.pNextLabel
   endwhile
 

@@ -3,7 +3,6 @@ TidyUpQuest property pQuest auto
 
 Event OnInit()
   pQuest = (GetOwningQuest() as TidyUpQuest)
-
   pQuest.Trace("receiver init")
 EndEvent
 

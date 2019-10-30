@@ -6,6 +6,10 @@ TidyUpLabel property pNextLabel auto
 Keyword[] property pKeywords auto
 FormList property pTemp auto
 
+String function GetLabelName()
+  return GetBaseObject().GetName()
+endFunction
+
 Event OnInit()
  pQuest.CreatedLabel(self)
 EndEvent

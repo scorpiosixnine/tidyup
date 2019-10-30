@@ -57,7 +57,7 @@ function TidyUp(Actor speaker)
 
   rReceiver.ForceRefTo(speaker)
   speaker.ShowGiftMenu(true, None, false, false)
-  rReceiver.ForceRefTo(None)
+  rReceiver.Clear()
 endFunction
 
 function TidyItem(ObjectReference item, Actor tidier)
@@ -72,6 +72,7 @@ function TidyItem(ObjectReference item, Actor tidier)
       int n = 0
       while n < base.GetNumKeywords()
         Trace(base.GetNthKeyword(n).GetString())
+        n += 1
       endWhile
     endif
   else
@@ -97,9 +98,10 @@ ObjectReference function TidyUpContainerFor(Form item)
       while n < count
         Keyword match = label.pKeywords[n]
         if item.HasKeyword(match)
-          Trace("Item " + name + " matches label" + label.GetDisplayName())
+          Trace("Item " + name + " matches label" + label.GetLabelName())
           return label.pContainer
         endif
+        n += 1
       endwhile
     endif
     label = label.pNextLabel
