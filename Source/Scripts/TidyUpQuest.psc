@@ -48,15 +48,32 @@ function ResetQuest()
   TraceFunction("Reset")
 EndFunction
 
-function TidyUpSpare(Actor speaker)
-  TraceFunction("tidying up spare stuff")
+function TidyUpSpare(Actor tidier)
+  TraceFunction("TidyUpSpare")
+  Actor player = Game.GetPlayer() as Actor
+  int count = player.GetNumItems()
+  int n = 0
+  int items = 0
+  while(n < count)
+    Form item = player.GetNthForm(n) as Form
+    if !Game.IsObjectFavorited(item)
+      int numberToTidy = player.GetItemCount(item)
+      if player.IsEquipped(item)
+        numberToTidy -= 1
+      endIf
+      if numberToTidy > 0
+        TidyForm(item, numberToTidy, tidier)
+      endIf
+    endif
+    n += 1
+  endWhile
 endFunction
 
-function TidyUp(Actor speaker)
+function TidyUp(Actor tidier)
   TraceFunction("tidying up")
 
-  rReceiver.ForceRefTo(speaker)
-  speaker.ShowGiftMenu(true, None, false, false)
+  rReceiver.ForceRefTo(tidier)
+  tidier.ShowGiftMenu(true, None, false, false)
   rReceiver.Clear()
 endFunction
 
@@ -68,12 +85,7 @@ function TidyItem(ObjectReference item, Actor tidier)
     if destination
       tidier.RemoveItem(item, 1, true, destination)
     else
-      Warning("Don't know where to put " + base.GetName())
-      int n = 0
-      while n < base.GetNumKeywords()
-        Trace(base.GetNthKeyword(n).GetString())
-        n += 1
-      endWhile
+      FailedToTidy(base)
     endif
   else
     Warning("item base missing")
@@ -85,7 +97,18 @@ function TidyForm(Form item, int count, Actor tidier)
     ObjectReference destination = TidyUpContainerFor(item)
     if destination
       tidier.RemoveItem(item, count, true, destination)
+    else
+      FailedToTidy(item)
     endif
+endFunction
+
+function FailedToTidy(Form base)
+  Warning("Don't know where to put " + base.GetName())
+  int n = 0
+  while n < base.GetNumKeywords()
+    Trace(base.GetNthKeyword(n).GetString())
+    n += 1
+  endWhile
 endFunction
 
 ObjectReference function TidyUpContainerFor(Form item)
