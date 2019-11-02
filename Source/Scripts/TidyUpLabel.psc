@@ -9,7 +9,7 @@ FormList property pTemp auto
 String function GetLabelName()
   ObjectReference bound = self as ObjectReference
   if bound
-    return bound.GetDisplayName()
+    return bound.GetName()
   else
     return "(unknown label)"
   endif

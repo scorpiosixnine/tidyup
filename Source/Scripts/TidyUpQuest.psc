@@ -135,7 +135,23 @@ endFunction
 function AddAllLabels(Actor speaker)
   TraceFunction("AddAllLabels")
   ObjectReference player = Game.GetPlayer()
-  player.AddItem(pLabelTemplates)
+
+  if GetLabelCount() == 0
+    ; we've got no labels, we can just give the whole list
+    player.AddItem(pLabelTemplates)
+  else
+    ; we've got some labels already, so only give the player the ones they are missing
+    ; (ie the ones that they've handed back at some point)
+    int count = pLabelTemplates.GetSize()
+    int n = 0
+    while n < count
+      Form label = pLabelTemplates.GetAt(n)
+      if !GotLabelForm(label)
+        player.AddItem(label)
+      endIf
+      n += 1
+    endWhile
+  endIf
 endFunction
 
 int function GetLabelCount()
@@ -152,6 +168,18 @@ bool function GotLabel(TidyUpLabel labelToCheck)
   TidyUpLabel label = pLabels
   while label
     if label == labelToCheck
+      return true
+    endif
+    label = label.pNextLabel
+  endwhile
+  return false
+endFunction
+
+bool function GotLabelForm(Form formToCheck)
+  int formID = formToCheck.GetFormID()
+  TidyUpLabel label = pLabels
+  while label
+    if label.GetFormID() == formID
       return true
     endif
     label = label.pNextLabel
