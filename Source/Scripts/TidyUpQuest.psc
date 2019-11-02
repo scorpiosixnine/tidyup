@@ -50,6 +50,7 @@ EndFunction
 
 function TidyUpSpare(Actor tidier)
   TraceFunction("TidyUpSpare")
+  rReceiver.ForceRefTo(tidier)
   Actor player = Game.GetPlayer() as Actor
   int count = player.GetNumItems()
   int n = 0
@@ -62,11 +63,12 @@ function TidyUpSpare(Actor tidier)
         numberToTidy -= 1
       endIf
       if numberToTidy > 0
-        TidyForm(item, numberToTidy, tidier)
+        player.RemoveItem(item, numberToTidy, false, tidier)
       endIf
     endif
     n += 1
   endWhile
+  rReceiver.Clear()
 endFunction
 
 function TidyUp(Actor tidier)
@@ -75,21 +77,6 @@ function TidyUp(Actor tidier)
   rReceiver.ForceRefTo(tidier)
   tidier.ShowGiftMenu(true, None, false, false)
   rReceiver.Clear()
-endFunction
-
-function TidyItem(ObjectReference item, Actor tidier)
-  Form base = item.GetBaseObject()
-  if base
-    self.Debug(tidier.GetDisplayName() + " will tidy up " + base.GetName())
-    ObjectReference destination = TidyUpContainerFor(base)
-    if destination
-      tidier.RemoveItem(item, 1, true, destination)
-    else
-      FailedToTidy(base)
-    endif
-  else
-    Warning("item base missing")
-  endif
 endFunction
 
 function TidyForm(Form item, int count, Actor tidier)
