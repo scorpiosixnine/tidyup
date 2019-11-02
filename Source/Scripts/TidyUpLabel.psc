@@ -4,7 +4,6 @@ TidyUpQuest property pQuest auto
 ObjectReference property pContainer auto
 TidyUpLabel property pNextLabel auto
 Keyword[] property pKeywords auto
-FormList property pTemp auto
 
 String function GetLabelName()
   ObjectReference bound = self as ObjectReference

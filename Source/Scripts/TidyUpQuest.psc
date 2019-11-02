@@ -176,10 +176,9 @@ bool function GotLabel(TidyUpLabel labelToCheck)
 endFunction
 
 bool function GotLabelForm(Form formToCheck)
-  int formID = formToCheck.GetFormID()
   TidyUpLabel label = pLabels
   while label
-    if label.GetFormID() == formID
+    if label.GetBaseObject() == formToCheck
       return true
     endif
     label = label.pNextLabel
@@ -220,4 +219,5 @@ function ForgetLabel(TidyUpLabel labelToForget)
   endIf
 
   Trace("forgot label " + labelToForget.GetDisplayName())
+  labelToForget.pNextLabel = None
 endFunction

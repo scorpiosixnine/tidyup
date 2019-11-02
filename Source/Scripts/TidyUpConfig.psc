@@ -140,6 +140,7 @@ function SetupToggle(String identifier, String name, bool initialState, int tag 
     _toggleValues[_toggleCount] = initialState
     _toggleIDs[_toggleCount] = identifier
     _toggleTags[_toggleCount] = tag
+    pQuest.Trace("Set up toggle " + _toggleCount + ": " + identifier + " (" + name + ") " + initialState)
     _toggleCount += 1
   endif
 endFunction

@@ -8,5 +8,5 @@ EndEvent
 
 event OnPlayerLoadGame()
 	(GetOwningQuest() as SKI_QuestBase).OnGameReload()
-  pQuest.TraceFunction("OnPlayerLoadGame")
+  (GetOwningQuest() as TidyUpQuest).TraceFunction("OnPlayerLoadGame")
 endEvent
