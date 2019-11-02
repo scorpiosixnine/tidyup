@@ -63,7 +63,7 @@ function TidyUpSpare(Actor tidier)
         numberToTidy -= 1
       endIf
       if numberToTidy > 0
-        player.RemoveItem(item, numberToTidy, false, tidier)
+        player.RemoveItem(item, numberToTidy, true, tidier)
       endIf
     endif
     n += 1
