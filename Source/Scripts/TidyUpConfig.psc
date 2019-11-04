@@ -37,7 +37,7 @@ endFunction
 
 int function GetVersion()
   Debug.Trace("TidyUp Version: " + pQuest.pBuildNumber)
-  
+
   return pQuest.pBuildNumber
 endFunction
 
@@ -121,8 +121,13 @@ function SetupDebugPage()
   int n = 0
   int count = pQuest.pLabelTemplates.GetSize()
   while n < count
-    TidyUpLabel label = pQuest.pLabelTemplates.GetAt(n) as TidyUpLabel
-    AddTextOption(label.GetLabelName(), label.pKeywords[0].GetString())
+    Form labelForm = pQuest.pLabelTemplates.GetAt(n)
+    TidyUpLabel label = labelForm as TidyUpLabel
+    if label
+      AddTextOption(label.GetLabelName(), label.pKeywords[0].GetString())
+    else
+      AddTextOption(labelForm.GetName(), "failed")
+    endif
     n += 1
   endWhile
 
@@ -130,7 +135,8 @@ function SetupDebugPage()
   AddHeaderOption("Current Labels")
   TidyUpLabel label = pQuest.pLabels
   while label
-    AddTextOption(label.GetLabelName(), label.pContainer.GetDisplayName())
+    int labelID = label.GetFormID()
+    AddTextOption(labelID, label.pContainer.GetDisplayName())
     label = label.pNextLabel
   endwhile
 

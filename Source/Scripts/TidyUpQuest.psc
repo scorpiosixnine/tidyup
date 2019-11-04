@@ -17,15 +17,11 @@ function TraceFunction(String name)
   pDebugMode = true
 
   if pDebugMode
-    Trace(name)
-    Trace("Got " + GetLabelCount() + " labels.")
+    Trace(name + " (" + GetLabelCount() + " labels)")
+    Trace("Got " )
 
-    if IsRunning()
-      Trace("Quest is running.")
-    endif
-
-    if IsActive()
-      Trace("Quest is active.")
+    if !IsRunning()
+      Trace("Quest is not running!")
     endif
   endIf
 
@@ -90,10 +86,10 @@ function TidyForm(Form item, int count, Actor tidier)
 endFunction
 
 function FailedToTidy(Form base)
-  Warning("Don't know where to put " + base.GetName())
+  Trace("Don't know where to put " + base.GetName() + ", which has keywords:")
   int n = 0
   while n < base.GetNumKeywords()
-    Trace(base.GetNthKeyword(n).GetString())
+    Trace(" - " + base.GetNthKeyword(n).GetString())
     n += 1
   endWhile
 endFunction
@@ -138,10 +134,12 @@ function AddAllLabels(Actor speaker)
 
   if GetLabelCount() == 0
     ; we've got no labels, we can just give the whole list
+    Trace("Giving all labels to player.")
     player.AddItem(pLabelTemplates)
   else
     ; we've got some labels already, so only give the player the ones they are missing
     ; (ie the ones that they've handed back at some point)
+    Trace("Player already has some labels, giving just the missing ones.")
     int count = pLabelTemplates.GetSize()
     int n = 0
     while n < count
@@ -176,13 +174,20 @@ bool function GotLabel(TidyUpLabel labelToCheck)
 endFunction
 
 bool function GotLabelForm(Form formToCheck)
+  Trace("GotLabelForm for " + formToCheck.GetName() + " " + formToCheck)
   TidyUpLabel label = pLabels
   while label
-    if label.GetBaseObject() == formToCheck
+    Trace("checking label " + label.GetLabelName())
+    Form base = label.GetBaseObject()
+    Trace("base is " + base.GetName() + " " + base)
+    if base == formToCheck
+      Trace("items match")
       return true
     endif
     label = label.pNextLabel
   endwhile
+
+  Trace("no label matched")
   return false
 endFunction
 
