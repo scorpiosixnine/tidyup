@@ -1,4 +1,4 @@
-Scriptname TidyUpQuest extends SKI_QuestBase
+Scriptname TidyUpQuest extends Quest
 {Main TidyUp quest script}
 
 TidyUpLabel property pLabels auto

@@ -1,4 +1,4 @@
-Scriptname TidyUpPlayer extends SKI_PlayerLoadGameAlias
+Scriptname TidyUpPlayer extends ReferenceAlias
 TidyUpQuest property pQuest auto
 
 Event OnInit()
