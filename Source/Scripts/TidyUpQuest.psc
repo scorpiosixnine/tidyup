@@ -142,7 +142,7 @@ function AddAllLabels(Actor speaker)
     int n = 0
     while n < count
       Form label = pLabelTemplates.GetAt(n)
-      if !GotLabelForm(label)
+      if !GotLabelFormID(label.GetFormID())
         player.AddItem(label)
       endIf
       n += 1
@@ -171,21 +171,18 @@ bool function GotLabel(TidyUpLabel labelToCheck)
   return false
 endFunction
 
-bool function GotLabelForm(Form formToCheck)
-  Trace("GotLabelForm for " + formToCheck.GetName() + " " + formToCheck)
+bool function GotLabelFormID(int formID)
+  Trace("GotLabelFormID: " + formID)
   TidyUpLabel label = pLabels
   while label
     Trace("checking label " + label.GetLabelName())
-    Form base = label.GetBaseObject()
-    Trace("base is " + base.GetName() + " " + base)
-    if base == formToCheck
-      Trace("items match")
+    if label.pFormID == formID
       return true
     endif
     label = label.pNextLabel
   endwhile
 
-  Trace("no label matched")
+  Trace("no label matched " + formID)
   return false
 endFunction
 
