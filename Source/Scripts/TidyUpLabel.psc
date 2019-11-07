@@ -8,23 +8,27 @@ int property pFormID auto
 String property pName auto
 
 String function GetLabelName()
-  if pName
+  if pName != ""
     return pName
   else
     return pKeywords[0].GetString()
   endif
 endFunction
 
+function RememberID()
+  pFormID = GetFormID()
+  pName = GetName()
+  pQuest.Trace("reset form id to " + pFormID + " for " + pName)
+endfunction
+
 Event OnInit()
- pQuest.CreatedLabel(self)
+  RememberID()
+  pQuest.CreatedLabel(self)
 EndEvent
 
 Event OnContainerChanged(ObjectReference akNewContainer, ObjectReference akOldContainer)
-  if !pName
-    Form base = GetBaseObject()
-    pFormID = base.GetFormID()
-    pName = base.GetName()
-    pQuest.Trace("reset form id to " + pFormID + " for " + pName)
+  if pName == ""
+    RememberID()
   endif
 
   pContainer = akNewContainer

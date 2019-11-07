@@ -102,7 +102,7 @@ ObjectReference function TidyUpContainerFor(Form item)
       while n < count
         Keyword match = label.pKeywords[n]
         if item.HasKeyword(match)
-          Trace("Item " + name + " matches label" + label.GetLabelName())
+          Trace("Item " + name + " matches label" + label.GetLabelName() + " container: " + label.pContainer)
           return label.pContainer
         endif
         n += 1
@@ -114,8 +114,7 @@ ObjectReference function TidyUpContainerFor(Form item)
 endFunction
 
 function LabelMoved(TidyUpLabel label, ObjectReference from, ObjectReference to)
-  TraceFunction("LabelMoved")
-  Trace("label " + label.GetDisplayName() + " moved from " + from.GetDisplayName() + " to " + to.GetDisplayName())
+  TraceFunction("LabelMoved: " + label.GetLabelName() + " moved from " + from.GetDisplayName() + " to " + to.GetDisplayName())
 
   Actor person = to as Actor
   if person && person.IsInFaction(pFollowerFaction)
