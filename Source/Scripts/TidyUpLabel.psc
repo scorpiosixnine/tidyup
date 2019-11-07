@@ -4,13 +4,14 @@ TidyUpQuest property pQuest auto
 ObjectReference property pContainer auto
 TidyUpLabel property pNextLabel auto
 Keyword[] property pKeywords auto
+int property pFormID auto
+String property pName auto
 
 String function GetLabelName()
-  ObjectReference bound = self as ObjectReference
-  if bound
-    return bound.GetName()
+  if pName
+    return pName
   else
-    return "(unknown label)"
+    return pKeywords[0].GetString()
   endif
 endFunction
 
@@ -19,6 +20,13 @@ Event OnInit()
 EndEvent
 
 Event OnContainerChanged(ObjectReference akNewContainer, ObjectReference akOldContainer)
+  if !pName
+    Form base = GetBaseObject()
+    pFormID = base.GetFormID()
+    pName = base.GetName()
+    pQuest.Trace("reset form id to " + pFormID + " for " + pName)
+  endif
+
   pContainer = akNewContainer
   pQuest.LabelMoved(self, akOldContainer, akNewContainer)
 EndEvent

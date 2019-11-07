@@ -18,8 +18,6 @@ function TraceFunction(String name)
 
   if pDebugMode
     Trace(name + " (" + GetLabelCount() + " labels)")
-    Trace("Got " )
-
     if !IsRunning()
       Trace("Quest is not running!")
     endif
