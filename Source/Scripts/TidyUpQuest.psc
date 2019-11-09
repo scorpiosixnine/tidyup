@@ -8,6 +8,9 @@ FormList property pEmptyList auto
 FormList property pLabelTemplates auto
 bool property pEnabled auto
 
+ObjectReference[] property pLocations auto
+Keyword[] property pKeywords auto
+
 event OnInit()
   Debug.Notification(pName + GetFullVersionString() + " Initialising.")
   SetEnabled(true)
@@ -93,37 +96,77 @@ function FailedToTidy(Form base)
 endFunction
 
 ObjectReference function TidyUpContainerFor(Form item)
-  String name = item.GetName()
-  TidyUpLabel label = pLabels
-  while label
-    if !(label.pContainer as Actor)
-      int n = 0
-      int count = label.pKeywords.Length
-      while n < count
-        Keyword match = label.pKeywords[n]
-        if item.HasKeyword(match)
-          Trace("Item " + name + " matches label" + label.GetLabelName() + " container: " + label.pContainer)
-          return label.pContainer
-        endif
-        n += 1
-      endwhile
+  int count = pKeywords.Length
+  int n = 0
+  while n < count
+    Keyword k = pKeywords[n]
+    if item.HasKeyword(k)
+      ObjectReference loc = pLocations[n]
+      Trace("Item " + item.GetName() + " matches keyword " + k.GetString() + " container: " + loc)
+      return loc
     endif
-    label = label.pNextLabel
+    n += 1
   endwhile
   return None
 endFunction
 
 function LabelMoved(TidyUpLabel label, ObjectReference from, ObjectReference to)
-  TraceFunction("LabelMoved: " + label.GetLabelName() + " moved from " + from.GetDisplayName() + " to " + to.GetDisplayName())
+  TraceFunction("LabelMoved: " + label.GetName() + " moved from " + from.GetDisplayName() + " to " + to.GetDisplayName())
 
   Actor person = to as Actor
   if person && person.IsInFaction(pFollowerFaction)
     Trace("handed label back to companion - destroying")
-    ForgetLabel(label)
+    ClearTidyLocation(label)
     person.RemoveItem(label, 1, true)
-    label.Delete()
+  else
+    SetTidyLocation(label, to)
   endIf
 endFunction
+
+function SetTidyLocation(TidyUpLabel label, ObjectReference loc)
+  int n = 0
+  int count = label.GetNumKeywords()
+  while n < count
+    SetKeywordLocation(label.GetNthKeyword(n), loc)
+    n += 1
+  endwhile
+endFunction
+
+function ClearTidyLocation(TidyUpLabel label)
+  int n = 0
+  int count = label.GetNumKeywords()
+  while n < count
+    ClearKeywordLocation(label.GetNthKeyword(n))
+    n += 1
+  endwhile
+endFunction
+
+function SetKeywordLocation(Keyword kind, ObjectReference loc)
+  int n = 0
+  int count = pKeywords.Length
+  while n < count
+    Keyword slot = pKeywords[n]
+    if (slot == kind) || !slot
+      pLocations[n] = loc
+      return
+    endif
+    n += 1
+  endwhile
+endFunction
+
+function ClearKeywordLocation(Keyword kind)
+  int n = 0
+  int count = pKeywords.Length
+  while n < count
+    Keyword slot = pKeywords[n]
+    if (slot == kind) || !slot
+      pLocations[n] = None
+      return
+    endif
+    n += 1
+  endwhile
+endFunction
+
 
 function AddAllLabels(Actor speaker)
   TraceFunction("AddAllLabels")
@@ -141,7 +184,7 @@ function AddAllLabels(Actor speaker)
     int n = 0
     while n < count
       Form label = pLabelTemplates.GetAt(n)
-      if !GotLabelFormID(label.GetFormID())
+      if !TidyUpContainerFor(label)
         player.AddItem(label)
       endIf
       n += 1
@@ -151,72 +194,13 @@ endFunction
 
 int function GetLabelCount()
   int n = 0
-  TidyUpLabel label = pLabels
-  while label
+  int count = pKeywords.Length
+  while n < count
+    Keyword slot = pKeywords[n]
+    if !slot
+      return n
+    endif
     n += 1
-    label = label.pNextLabel
   endwhile
-  return n
-endFunction
-
-bool function GotLabel(TidyUpLabel labelToCheck)
-  TidyUpLabel label = pLabels
-  while label
-    if label == labelToCheck
-      return true
-    endif
-    label = label.pNextLabel
-  endwhile
-  return false
-endFunction
-
-bool function GotLabelFormID(int formID)
-  Trace("GotLabelFormID: " + formID)
-  TidyUpLabel label = pLabels
-  while label
-    Trace("checking label " + label.GetLabelName())
-    if label.pFormID == formID
-      return true
-    endif
-    label = label.pNextLabel
-  endwhile
-
-  Trace("no label matched " + formID)
-  return false
-endFunction
-
-function CreatedLabel(TidyUpLabel label)
-  TraceFunction("created label")
-  RememberLabel(label)
-endFunction
-
-function RememberLabel(TidyUpLabel label)
-  TraceFunction("RememberLabel")
-  if !label
-    Warning("remembering null label")
-  endif
-
-  if !GotLabel(label)
-    label.pNextLabel = pLabels
-    pLabels = label
-  endIf
-endFunction
-
-function ForgetLabel(TidyUpLabel labelToForget)
-  TraceFunction("ForgetLabel")
-  if pLabels == labelToForget
-    pLabels = pLabels.pNextLabel
-
-  else
-    TidyUpLabel label = pLabels
-    while label
-      if label.pNextLabel == labelToForget
-        label.pNextLabel = label.pNextLabel
-        return
-      endif
-    endwhile
-  endIf
-
-  Trace("forgot label " + labelToForget.GetDisplayName())
-  labelToForget.pNextLabel = None
+  return count
 endFunction

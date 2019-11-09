@@ -119,26 +119,26 @@ function SetupDebugPage()
 
   AddHeaderOption("Label Types")
   int n = 0
-  int count = pQuest.pLabelTemplates.GetSize()
+  int count = pQuest.pKeywords.Length
   while n < count
-    Form labelForm = pQuest.pLabelTemplates.GetAt(n)
-    TidyUpLabel label = labelForm as TidyUpLabel
-    if label
-      AddTextOption(label.GetLabelName(), label.pKeywords[0].GetString())
+    Keyword k = pQuest.pKeywords[n]
+    if k
+      ObjectReference loc = pQuest.pLocations[n]
+      AddTextOption(k.GetString(), loc.GetDisplayName())
+      n += 1
     else
-      AddTextOption(labelForm.GetName(), "failed")
+      n = count
     endif
-    n += 1
   endWhile
 
-  SetCursorPosition(1)
-  AddHeaderOption("Current Labels")
-  TidyUpLabel label = pQuest.pLabels
-  while label
-    int labelID = label.GetFormID()
-    AddTextOption(labelID, label.pContainer.GetDisplayName())
-    label = label.pNextLabel
-  endwhile
+  ; SetCursorPosition(1)
+  ; AddHeaderOption("Current Labels")
+  ; TidyUpLabel label = pQuest.pLabels
+  ; while label
+  ;   int labelID = label.GetFormID()
+  ;   AddTextOption(labelID, label.pContainer.GetDisplayName())
+  ;   label = label.pNextLabel
+  ; endwhile
 
 endFunction
 
