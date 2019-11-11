@@ -180,14 +180,18 @@ function SetKeywordLocation(Keyword kind, ObjectReference loc)
   TraceFunction("SetTidyLocation for keyword " + kind.GetString() + " to " + loc.GetDisplayName())
   int n = 0
   int count = pKeywords.Length
+  Trace("total slots: " + count)
   while n < count
     Keyword slot = pKeywords[n]
     if (slot == kind) || !slot
+      pKeywords[n] = kind
       pLocations[n] = loc
+      Trace("using slot " + n)
       return
     endif
     n += 1
   endwhile
+  Trace("run out of slots")
 endFunction
 
 function ClearKeywordLocation(Keyword kind)
