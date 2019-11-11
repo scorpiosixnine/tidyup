@@ -36,13 +36,11 @@ function ResetProperties()
 endFunction
 
 int function GetVersion()
-  Debug.Trace("TidyUp Version: " + pQuest.pBuildNumber)
-
   return pQuest.pBuildNumber
 endFunction
 
 event OnVersionUpdate(int newVersion)
-  pQuest.Log(pQuest.pName + " updated to version " + pQuest.GetFullVersionString())
+  pQuest.UpdatedTo(newVersion)
   ResetProperties()
 endEvent
 

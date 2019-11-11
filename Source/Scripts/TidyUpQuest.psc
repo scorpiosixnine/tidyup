@@ -37,10 +37,25 @@ function SetEnabled(bool enabled)
   endif
 endFunction
 
+
+function AllocateArrays()
+  Trace("Allocating new arrays")
+  pKeywords = new Keyword[127]
+  pLocations = new ObjectReference[127]
+endFunction
+
+function UpdatedTo(int version)
+  self.Log(pName + " updated to version " + GetFullVersionString())
+  if !pKeywords || !pLocations || pKeywords.Length == 0 || pLocations.Length == 0
+    AllocateArrays()
+  endif
+endFunction
+
 function ResetQuest()
   TraceFunction("Resetting")
   Reset()
   Start()
+  AllocateArrays()
   TraceFunction("Reset")
 EndFunction
 
@@ -142,6 +157,7 @@ function LabelMovedFrom(ObjectReference object)
 endfunction
 
 function SetTidyLocation(Form label, ObjectReference loc)
+  TraceFunction("SetTidyLocation for " + label.GetName() + " to " + loc.GetDisplayName())
   int n = 0
   int count = label.GetNumKeywords()
   while n < count
@@ -151,6 +167,7 @@ function SetTidyLocation(Form label, ObjectReference loc)
 endFunction
 
 function ClearTidyLocation(Form label)
+  TraceFunction("ClearTidyLocation for " + label.GetName())
   int n = 0
   int count = label.GetNumKeywords()
   while n < count
@@ -160,6 +177,7 @@ function ClearTidyLocation(Form label)
 endFunction
 
 function SetKeywordLocation(Keyword kind, ObjectReference loc)
+  TraceFunction("SetTidyLocation for keyword " + kind.GetString() + " to " + loc.GetDisplayName())
   int n = 0
   int count = pKeywords.Length
   while n < count
@@ -173,6 +191,7 @@ function SetKeywordLocation(Keyword kind, ObjectReference loc)
 endFunction
 
 function ClearKeywordLocation(Keyword kind)
+  TraceFunction("ClearTidyLocation for keyword " + kind.GetString())
   int n = 0
   int count = pKeywords.Length
   while n < count
