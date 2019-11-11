@@ -101,19 +101,7 @@ function SetupGeneralPage()
 
   AddHeaderOption(pQuest.pName + pQuest.GetFullVersionString())
   AddTextOption("By scorpiosixnine.", "")
-
-  SetCursorPosition(1)
-  AddHeaderOption("Settings " + pQuest.GetFullVersionString())
-  SetupToggle("Enabled", "Enabled", pQuest.pEnabled)
-  _resetButton = AddMenuOption("", "Reset")
-
   AddEmptyOption()
-  AddHeaderOption("Debug Options")
-  SetupToggle("Debugging", "Enable Logging", pQuest.pDebugMode)
-endFunction
-
-function SetupDebugPage()
-  SetCursorFillMode(TOP_TO_BOTTOM)
 
   AddHeaderOption("Label Types")
   int n = 0
@@ -129,14 +117,17 @@ function SetupDebugPage()
     endif
   endWhile
 
-  ; SetCursorPosition(1)
-  ; AddHeaderOption("Current Labels")
-  ; TidyUpLabel label = pQuest.pLabels
-  ; while label
-  ;   int labelID = label.GetFormID()
-  ;   AddTextOption(labelID, label.pContainer.GetDisplayName())
-  ;   label = label.pNextLabel
-  ; endwhile
+  SetCursorPosition(1)
+  AddHeaderOption("Settings " + pQuest.GetFullVersionString())
+  SetupToggle("Enabled", "Enabled", pQuest.pEnabled)
+
+endFunction
+
+function SetupDebugPage()
+  SetCursorFillMode(TOP_TO_BOTTOM)
+
+  AddHeaderOption("Debug Options")
+  SetupToggle("Debugging", "Enable Logging", pQuest.pDebugMode)
 
 endFunction
 
