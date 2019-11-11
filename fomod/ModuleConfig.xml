@@ -1,0 +1,8 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://qconsulting.ca/fo3/ModConfig5.0.xsd">
+	<moduleName>TidyUp</moduleName>
+	<moduleDependencies operator="And">
+	</moduleDependencies>
+	<requiredInstallFiles>
+		<folder destination="" source="TidyUp" />
+	</requiredInstallFiles>
+</config>

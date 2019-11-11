@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fomod>
+  <Name>TidyUp</Name>
+  <Author>scorpiosixnine</Author>
+  <Version>{VERSION}</Version>
+  <Website>https://github.com/scorpiosixnine/tidyup</Website>
+  <Groups>
+    <element>Utilities</element>
+  </Groups>
+</fomod>
