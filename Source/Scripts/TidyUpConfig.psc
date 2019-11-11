@@ -102,6 +102,12 @@ function SetupGeneralPage()
   AddHeaderOption(pQuest.pName + pQuest.GetFullVersionString())
   AddTextOption("By scorpiosixnine.", "")
   AddEmptyOption()
+  AddTextOption("Warning: This is an early release. Here be bugs!", "")
+
+  AddHeaderOption("Settings")
+  SetupToggle("Enabled", "Enabled", pQuest.pEnabled)
+
+  SetCursorPosition(1)
 
   AddHeaderOption("Label Types")
   int n = 0
@@ -117,9 +123,6 @@ function SetupGeneralPage()
     endif
   endWhile
 
-  SetCursorPosition(1)
-  AddHeaderOption("Settings " + pQuest.GetFullVersionString())
-  SetupToggle("Enabled", "Enabled", pQuest.pEnabled)
 
 endFunction
 
