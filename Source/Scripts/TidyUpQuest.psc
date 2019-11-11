@@ -1,7 +1,6 @@
 Scriptname TidyUpQuest extends Quest
 {Main TidyUp quest script}
 
-TidyUpLabel property pLabels auto
 Faction property pFollowerFaction auto
 ReferenceAlias property rReceiver auto
 FormList property pEmptyList auto
@@ -110,20 +109,39 @@ ObjectReference function TidyUpContainerFor(Form item)
   return None
 endFunction
 
-function LabelMoved(TidyUpLabel label, ObjectReference from, ObjectReference to)
-  TraceFunction("LabelMoved: " + label.GetName() + " moved from " + from.GetDisplayName() + " to " + to.GetDisplayName())
+function LabelMovedTo(ObjectReference object)
+  TraceFunction("LabelMovedTo: " + object.GetDisplayName())
+  int count = object.GetNumItems()
+  int n = 0
+  while n < count
+    Form item = object.GetNthForm(n)
+    if pLabelTemplates.HasForm(item)
+      SetTidyLocation(item, object)
+    endif
+    n += 1
+  endWhile
+endfunction
 
-  Actor person = to as Actor
+function LabelMovedFrom(ObjectReference object)
+  TraceFunction("LabelMovedFrom: " + object.GetDisplayName())
+  int count = object.GetNumItems()
+  int n = 0
+  while n < count
+    Form item = object.GetNthForm(n)
+    if pLabelTemplates.HasForm(item)
+      ClearTidyLocation(item)
+    endif
+    n += 1
+  endWhile
+
+  Actor person = object as Actor
   if person && person.IsInFaction(pFollowerFaction)
     Trace("handed label back to companion - destroying")
-    ClearTidyLocation(label)
-    person.RemoveItem(label, 1, true)
-  else
-    SetTidyLocation(label, to)
-  endIf
-endFunction
+    person.RemoveItem(pLabelTemplates, 1, true)
+  endif
+endfunction
 
-function SetTidyLocation(TidyUpLabel label, ObjectReference loc)
+function SetTidyLocation(Form label, ObjectReference loc)
   int n = 0
   int count = label.GetNumKeywords()
   while n < count
@@ -132,7 +150,7 @@ function SetTidyLocation(TidyUpLabel label, ObjectReference loc)
   endwhile
 endFunction
 
-function ClearTidyLocation(TidyUpLabel label)
+function ClearTidyLocation(Form label)
   int n = 0
   int count = label.GetNumKeywords()
   while n < count
