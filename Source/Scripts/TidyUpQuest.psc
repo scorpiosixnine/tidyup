@@ -59,26 +59,10 @@ function ResetQuest()
   TraceFunction("Reset")
 EndFunction
 
-function TidyUpSpare(Actor tidier)
+function TidyUpStored(Actor tidier)
   TraceFunction("TidyUpSpare")
   rReceiver.ForceRefTo(tidier)
-  Actor player = Game.GetPlayer() as Actor
-  int count = player.GetNumItems()
-  int n = 0
-  int items = 0
-  while(n < count)
-    Form item = player.GetNthForm(n) as Form
-    if !Game.IsObjectFavorited(item)
-      int numberToTidy = player.GetItemCount(item)
-      if player.IsEquipped(item)
-        numberToTidy -= 1
-      endIf
-      if numberToTidy > 0
-        player.RemoveItem(item, numberToTidy, true, tidier)
-      endIf
-    endif
-    n += 1
-  endWhile
+  ; TODO: iterate labels, tidying everything in the container of each one in turn
   rReceiver.Clear()
 endFunction
 
